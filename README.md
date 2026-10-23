@@ -1,2 +1,20 @@
 # orca_imagshift
-A bash script to produce geometries shifted along the imaginary modes, for reoptimization in ORCA
+A bash script to produce geometries shifted along the imaginary modes, for reoptimization in <a href=https://https://orcaforum.kofo.mpg.de>ORCA</a>
+## Dependencies
+shift_coords.py
+sed
+gawk
+
+## How to use
+orca_imagshift orca_output_file.out multiplier
+
+Multiplier is used to multiply the normal mode coordinates before adding them  to the optimized geometry. The result can be closer or further from equilibrium, so please check the result in Avogadro or elsewhere to ensure that the initial geometry for the reoptimization is not meaningless.
+
+## Effect
+A file named orca_output_file_shifted.xyz is created in the same directory.
+It is a headless XYZ file, i.e. without the number-of-atoms line and the title line. It is most convenient for inserting into the input file.
+
+## Purpose
+Sometimes after the geometry optimization we arrive at the saddle point instead of a minimum (an unpleasant surprise, especially on Fridays). To check for this, You should include Freq keyword into Your optimizations. It does not. however, solve the problem of having produced the saddle-point geometry and not the optimum one.
+
+For this, I created this script. We take the coordinates of the imaginary mode or modes, multiply them with a multiplier and add them to the geometry at the stationary point from the calculation. The resulting geometry can be then used to start a new optimization. Yes, the dimensions of the normal mode coordinates is different than the Cartesians used for the geometry itself (because they are normalized by dividing by the square of effective mass). However, there is some hope it will result in some useful initial guess for the geometry.
